@@ -2,28 +2,16 @@
 #include "Processor.h"
 
 
-Processor::Processor(std::vector<Word>& initial_set, std::vector<std::shared_ptr<Rule> >& rule_set,
-	std::shared_ptr<Filter> inputFilter, std::shared_ptr<Filter> outputFilter)
-	: _ruleSet(rule_set), _inputFilter(inputFilter), _outputFilter(outputFilter)
+Processor::Processor(const std::vector<Word>& initialSet, std::vector<std::shared_ptr<Rule> >& ruleSet,
+	const std::shared_ptr<Filter>& inputFilter, const std::shared_ptr<Filter>& outputFilter)
+	: ruleSet_(ruleSet), inputFilter_(inputFilter), outputFilter_(outputFilter)
 {
-	for (auto w : initial_set) { //TODO: define multiset
-		_wordSet[w] = 1;
+	for (auto w : initialSet) {
+		wordSet_.add(w);
 	}
-}
-
-
-Processor::~Processor()
-{
 }
 
 void Processor::evolve()
 {
-	std::vector<Word> remaining;
-	for (auto w : _wordSet)
-	{
-		for (auto r : _ruleSet) {
-			//if (r->isApplicable(w)) {
-			//}
-		}
-	}
+	//TODO
 }

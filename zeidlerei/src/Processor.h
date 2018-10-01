@@ -6,18 +6,18 @@
 #include "Word.h"
 #include "Rule.h"
 #include "Filter.h"
+#include "Multiset.h"
 
 class Processor
 {
 public:
-	Processor(std::vector<Word>& initial_set, std::vector<std::shared_ptr<Rule> >& rule_set,
-		std::shared_ptr<Filter> inputFilter, std::shared_ptr<Filter> outputFilter);
-	~Processor();
+	Processor(const std::vector<Word>& initialSet, std::vector<std::shared_ptr<Rule> >& ruleSet,
+		const std::shared_ptr<Filter>& inputFilter, const std::shared_ptr<Filter>& outputFilter);
 	virtual void evolve();
 protected:
-	std::map<Word, int> _wordSet;
-	std::vector<std::shared_ptr<Rule> >& _ruleSet;
-	std::shared_ptr<Filter> _inputFilter;
-	std::shared_ptr<Filter> _outputFilter;
+	Multiset<Word> wordSet_;
+	std::vector<std::shared_ptr<Rule> > ruleSet_;
+	std::shared_ptr<Filter> inputFilter_;
+	std::shared_ptr<Filter> outputFilter_;
 };
 
