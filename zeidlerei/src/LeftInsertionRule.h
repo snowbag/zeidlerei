@@ -5,8 +5,7 @@ class LeftInsertionRule :
 {
 public:
 	LeftInsertionRule(const std::string& rhs) : Rule("", rhs) {}
-	~LeftInsertionRule();
-	std::vector<Word> apply(Word& w) const override;
-	bool isApplicable(Word& w) const override;
+	std::vector<Word> apply(Word& word) const override;
+	bool isApplicable(Word& word) const override;
 };
 

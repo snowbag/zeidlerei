@@ -10,8 +10,8 @@
 #include "gtest/gtest.h"
 
 TEST(Processors, Initialize) {
-	auto init = std::vector<Word>{ Word("") };
-	auto ruleSet = std::vector <std::shared_ptr<Rule> >();
-	auto freeFilter = std::make_shared<FreeFilter>(FreeFilter());
+	std::vector<Word> init = { Word("") };
+	std::vector<std::shared_ptr<Rule> > ruleSet;
+	std::shared_ptr<Filter> freeFilter = std::make_shared<FreeFilter>(FreeFilter());
 	Processor p(init, ruleSet, freeFilter, freeFilter);
 }

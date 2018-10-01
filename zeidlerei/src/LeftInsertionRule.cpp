@@ -1,15 +1,11 @@
 #include "stdafx.h"
 #include "LeftInsertionRule.h"
 
-LeftInsertionRule::~LeftInsertionRule()
-{
-}
-
-std::vector<Word> LeftInsertionRule::apply(Word& w) const {
-	auto result = std::vector<Word>{ Word(_rhs + w.getContent()) };
+std::vector<Word> LeftInsertionRule::apply(Word& word) const {
+	std::vector<Word> result = { Word(rhs_ + word.getContent()) };
 	return result;
 }
 
-bool LeftInsertionRule::isApplicable(Word& w) const {
+bool LeftInsertionRule::isApplicable(Word& word) const {
 	return true;
 }

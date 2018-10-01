@@ -5,40 +5,37 @@ template <class T>
 class Multiset
 {
 public:
-	Multiset() {}
-	~Multiset() {}
-
-	void add(const T &element, const unsigned int &count = 1)
+	void add(const T& element, const unsigned int& count = 1)
 	{
-		content[element] += count;
+		content_[element] += count;
 	}
 
-	void remove(const T &element, const unsigned int &count = 1)
+	void remove(const T& element, const unsigned int& count = 1)
 	{
-		content[element] -= count;
-		if (content[element] <= 0) {
-			content.erase(element);
+		content_[element] -= count;
+		if (content_[element] <= 0) {
+			content_.erase(element);
 		}
 	}
 
-	void addAll(const Multiset<T> &other)
+	void addAll(const Multiset<T>& other)
 	{
-		for (auto pair : other.content) {
-			content[pair.first] += pair.second;
+		for (auto pair : other.content_) {
+			content_[pair.first] += pair.second;
 		}
 	}
 
 
-	int operator[](const T &element)
+	int operator[](const T& element)
 	{
-		return content[element];
+		return content_[element];
 	}
 
-	bool contains(const T &element) const
+	bool contains(const T& element) const
 	{
-		return content.find(element) != content.end();
+		return content_.find(element) != content_.end();
 	}
 private:
-	std::map<T, unsigned int> content;
+	std::map<T, unsigned int> content_;
 };
 

@@ -1,20 +1,15 @@
 #include "stdafx.h"
 #include "LeftDeletionRule.h"
 
-
-LeftDeletionRule::~LeftDeletionRule()
+std::vector<Word> LeftDeletionRule::apply(Word& word) const
 {
-}
-
-std::vector<Word> LeftDeletionRule::apply(Word& w) const
-{
-	if (isApplicable(w))
+	if (isApplicable(word))
 	{
-		return std::vector<Word> { w.getContent().substr(_lhs.length()) };
+		return std::vector<Word> { word.getContent().substr(lhs_.length()) };
 	}
 }
 
-bool LeftDeletionRule::isApplicable(Word& w) const
+bool LeftDeletionRule::isApplicable(Word& word) const
 {
-	return w.getContent().substr(0,_lhs.length()) == _lhs;
+	return word.getContent().substr(0,lhs_.length()) == lhs_;
 }

@@ -1,16 +1,11 @@
 #include "stdafx.h"
 #include "RightInsertionRule.h"
 
-
-RightInsertionRule::~RightInsertionRule()
-{
-}
-
-std::vector<Word> RightInsertionRule::apply(Word& w) const {
-	auto result = std::vector<Word>{ w.getContent() + _rhs };
+std::vector<Word> RightInsertionRule::apply(Word& word) const {
+	std::vector<Word> result = { word.getContent() + rhs_ };
 	return result;
 }
 
-bool RightInsertionRule::isApplicable(Word& w) const {
+bool RightInsertionRule::isApplicable(Word& word) const {
 	return true;
 }

@@ -4,8 +4,5 @@
 class Filter
 {
 public:
-	Filter();
-	~Filter();
-	virtual bool apply(Word& w) const = 0;
+	virtual bool apply(Word& word) const = 0;
 };
-
