@@ -25,7 +25,6 @@ public:
 		}
 	}
 
-
 	int operator[](const T& element)
 	{
 		return content_[element];
@@ -34,6 +33,19 @@ public:
 	bool contains(const T& element) const
 	{
 		return content_.find(element) != content_.end();
+	}
+
+	void clear() {
+		content_.clear();
+	}
+
+	auto begin() { return content_.begin(); }
+	auto end() { return content_.end(); }
+	auto begin() const { return content_.begin(); }
+	auto end() const { return content_.end(); }
+
+	bool operator==(const Multiset<T>& rhs) const {
+		return content_ == rhs.content_;
 	}
 private:
 	std::map<T, unsigned int> content_;
