@@ -26,6 +26,8 @@ public:
 	Processor(const std::vector<Word>& initialSet, std::vector<std::shared_ptr<Rule> >& ruleSet,
 		const std::shared_ptr<Filter>& inputFilter, const std::shared_ptr<Filter>& outputFilter);
 	virtual void evolve();
+	virtual void receiveInputWords(const Multiset<Word>& inputWords);
+	virtual Multiset<Word> getOutputWords();
 	virtual Configuration exportConfiguration();
 protected:
 	Multiset<Word> wordSet_;

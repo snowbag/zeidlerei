@@ -10,7 +10,8 @@
 
 #include "gtest/gtest.h"
 
-TEST(Processors, EvolveWords) {
+TEST(Processors, EvolveWords)
+{
 	std::vector<Word> init = { Word(""), Word("a") };
 	std::vector<std::shared_ptr<Rule> > ruleSet;
 	ruleSet.push_back(std::make_shared<LeftInsertionRule>(LeftInsertionRule("a")));
@@ -28,4 +29,20 @@ TEST(Processors, EvolveWords) {
 	p.evolve();
 	Processor::Configuration config = p.exportConfiguration();
 	ASSERT_EQ(config.wordSet, expected);
+}
+
+TEST(Processors, CommunicateAllWords)
+{
+	std::vector<Word> init = { Word(""), Word("a") };
+	std::vector<std::shared_ptr<Rule> > ruleSet;
+	std::shared_ptr<Filter> freeFilter = std::make_shared<FreeFilter>(FreeFilter());
+
+	Processor p(init, ruleSet, freeFilter, freeFilter);
+
+	Multiset<Word> expected, emptySet;
+	expected.add(Word(""));
+	expected.add(Word("a"));
+
+	ASSERT_EQ(p.getOutputWords(), expected);
+	ASSERT_EQ(p.exportConfiguration().wordSet, emptySet);
 }

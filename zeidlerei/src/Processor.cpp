@@ -17,7 +17,7 @@ void Processor::evolve()
 {
 	std::set<Word> usedWords;
 	std::set<Word> createdWords;
-	for (auto p : wordSet_) {
+	for (auto p : wordSet_) { //TODO: iterator on wordset keys
 		Word w = p.first;
 		for (auto r : ruleSet_) {
 			if (r->isApplicable(w)) {
@@ -40,6 +40,33 @@ void Processor::evolve()
 	for (auto w : createdWords) {
 		wordSet_.add(w);
 	}
+}
+
+void Processor::receiveInputWords(const Multiset<Word>& inputWords)
+{
+	for (auto p : inputWords) {
+		Word w = p.first;
+		if (inputFilter_->apply(w)) {
+			wordSet_.add(w, p.second);
+		}
+	}
+}
+
+Multiset<Word> Processor::getOutputWords()
+{
+	Multiset<Word> sentWords;
+	Multiset<Word> remainingWords; //TODO: iterating on a separate vector of words as keys -> no need to create new multiset
+	for (auto p : wordSet_) {
+		Word w = p.first;
+		if (outputFilter_->apply(w)) {
+			sentWords.add(w, p.second);
+		}
+		else {
+			remainingWords.add(w, p.second);
+		}
+	}
+	wordSet_ = remainingWords;
+	return sentWords;
 }
 
 Processor::Configuration Processor::exportConfiguration()
