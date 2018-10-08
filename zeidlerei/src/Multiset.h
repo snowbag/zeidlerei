@@ -39,13 +39,19 @@ public:
 		content_.clear();
 	}
 
-	auto begin() { return content_.begin(); }
-	auto end() { return content_.end(); }
 	auto begin() const { return content_.begin(); }
 	auto end() const { return content_.end(); }
 
 	bool operator==(const Multiset<T>& rhs) const {
 		return content_ == rhs.content_;
+	}
+
+	int size() const {
+		int sum = 0;
+		std::for_each(content_.begin(), content_.end(), [&](auto pair) {
+			sum += pair.second;
+		});
+		return sum;
 	}
 private:
 	std::map<T, unsigned int> content_;

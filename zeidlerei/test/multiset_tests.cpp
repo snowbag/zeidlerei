@@ -9,6 +9,7 @@ TEST(Multisets, AddOneElement) {
 	Multiset<std::string> ms;
 	ms.add("abc");
 	ASSERT_EQ(ms["abc"], 1);
+	ASSERT_EQ(ms.size(), 1);
 }
 
 TEST(Multisets, ElementsTwice) {
@@ -18,6 +19,7 @@ TEST(Multisets, ElementsTwice) {
 	ms.add("efg",2);
 	ASSERT_EQ(ms["abc"], 2);
 	ASSERT_EQ(ms["efg"], 2);
+	ASSERT_EQ(ms.size(), 4);
 }
 
 TEST(Multisets, AddAndRemoveElement) {
@@ -27,6 +29,7 @@ TEST(Multisets, AddAndRemoveElement) {
 	ASSERT_TRUE(ms.contains("abc"));
 	ms.remove("abc");
 	ASSERT_FALSE(ms.contains("abc"));
+	ASSERT_EQ(ms.size(), 0);
 }
 
 TEST(Multisets, CombineMultisets)
@@ -42,4 +45,6 @@ TEST(Multisets, CombineMultisets)
 	ASSERT_EQ(ms1["g"], 2);
 	ASSERT_EQ(ms2["abc"], 4);
 	ASSERT_EQ(ms2["g"], 2);
+	ASSERT_EQ(ms1.size(), 10);
+	ASSERT_EQ(ms2.size(), 6);
 }
