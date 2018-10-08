@@ -4,7 +4,7 @@
 #include <algorithm>
 
 
-Network::Network(std::vector<Processor> processors, std::vector<Edge> edges)
+Network::Network(std::vector<Processor*> processors, std::vector<Edge> edges)
 {
 	nodes_ = processors;
 	for (auto e : edges) {
@@ -21,4 +21,9 @@ bool Network::hasEdge(const Edge& edge)
 {
 	auto v = connections_[edge.left];
 	return std::find(v.begin(),v.end(), edge.right) != v.end();
+}
+
+const std::vector<Processor*>& Network::getProcessors()
+{
+	return nodes_;
 }

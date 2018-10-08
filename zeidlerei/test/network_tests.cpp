@@ -19,7 +19,7 @@ TEST(Networks, TwoNodesConnected)
 	std::shared_ptr<Filter> freeFilter = std::make_shared<FreeFilter>(FreeFilter());
 	Processor p1(init, ruleSet, freeFilter, freeFilter);
 	Processor p2(init, ruleSet, freeFilter, freeFilter);
-	std::vector<Processor> processors = { p1, p2 };
+	std::vector<Processor*> processors = { &p1, &p2 };
 	std::vector<Network::Edge> edges = { Network::Edge(&p1,&p2) };
 	Network network(processors, edges);
 }
@@ -33,7 +33,7 @@ TEST(Networks, ThreeNodesOneConnection)
 	Processor p1(init, ruleSet1, freeFilter, freeFilter);
 	Processor p2(init, ruleSet2, freeFilter, freeFilter);
 	Processor p3(init, ruleSet3, freeFilter, freeFilter);
-	std::vector<Processor> processors = { p1, p2, p3 };
+	std::vector<Processor*> processors = { &p1, &p2, &p3 };
 	std::vector<Network::Edge> edges = { Network::Edge(&p1,&p2) };
 	Network network(processors, edges);
 	ASSERT_TRUE(network.hasEdge(Network::Edge(&p1, &p2)));
