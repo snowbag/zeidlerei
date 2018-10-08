@@ -42,7 +42,7 @@ void Processor::evolve()
 	}
 }
 
-void Processor::receiveInputWords(const Multiset<Word>& inputWords)
+void Processor::receive(const Multiset<Word>& inputWords)
 {
 	for (auto p : inputWords) {
 		Word w = p.first;
@@ -52,7 +52,7 @@ void Processor::receiveInputWords(const Multiset<Word>& inputWords)
 	}
 }
 
-Multiset<Word> Processor::getOutputWords()
+Multiset<Word> Processor::collectOutput()
 {
 	Multiset<Word> sentWords;
 	Multiset<Word> remainingWords; //TODO: iterating on a separate vector of words as keys -> no need to create new multiset

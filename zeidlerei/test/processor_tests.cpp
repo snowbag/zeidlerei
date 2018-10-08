@@ -43,6 +43,6 @@ TEST(Processors, CommunicateAllWords)
 	expected.add(Word(""));
 	expected.add(Word("a"));
 
-	ASSERT_EQ(p.getOutputWords(), expected);
+	ASSERT_EQ(p.collectOutput(), expected);
 	ASSERT_EQ(p.exportConfiguration().wordSet, emptySet);
 }
