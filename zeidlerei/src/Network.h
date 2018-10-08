@@ -18,6 +18,7 @@ public:
 	~Network();
 	bool hasEdge(const Edge& edge);
 	const std::vector<Processor*>& getProcessors();
+	const std::vector<Processor*>& getNeighbours(Processor* processor);
 private:
 	std::vector<Processor*> nodes_;
 	std::map<Processor*,std::vector<Processor*> > connections_;

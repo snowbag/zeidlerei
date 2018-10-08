@@ -4,7 +4,7 @@
 class Simulator
 {
 public:
-	enum StepType { initial, evolutionary, communication };
+	enum StepType { initial, evolution, communication };
 	Simulator(const Network& network, const StepType& lastStepType = initial) : network_(network), lastStepType_(lastStepType) {}
 	~Simulator();
 	void executeStep();

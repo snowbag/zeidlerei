@@ -27,12 +27,14 @@ public:
 		const std::shared_ptr<Filter>& inputFilter, const std::shared_ptr<Filter>& outputFilter);
 	virtual void evolve();
 	virtual void receive(const Multiset<Word>& inputWords);
-	virtual Multiset<Word> collectOutput();
+	virtual void collectOutput();
+	virtual Multiset<Word> flushOutput();
 	virtual Configuration exportConfiguration();
 protected:
 	Multiset<Word> wordSet_;
 	std::vector<std::shared_ptr<Rule> > ruleSet_;
 	std::shared_ptr<Filter> inputFilter_;
 	std::shared_ptr<Filter> outputFilter_;
+	Multiset<Word> output_;
 };
 

@@ -52,20 +52,25 @@ void Processor::receive(const Multiset<Word>& inputWords)
 	}
 }
 
-Multiset<Word> Processor::collectOutput()
+void Processor::collectOutput()
 {
-	Multiset<Word> sentWords;
 	Multiset<Word> remainingWords; //TODO: iterating on a separate vector of words as keys -> no need to create new multiset
 	for (auto p : wordSet_) {
 		Word w = p.first;
 		if (outputFilter_->apply(w)) {
-			sentWords.add(w, p.second);
+			output_.add(w, p.second);
 		}
 		else {
 			remainingWords.add(w, p.second);
 		}
 	}
 	wordSet_ = remainingWords;
+}
+
+Multiset<Word> Processor::flushOutput()
+{
+	Multiset<Word> sentWords = output_; //TODO move constructor?
+	output_.clear();
 	return sentWords;
 }
 

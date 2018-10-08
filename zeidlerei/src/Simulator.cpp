@@ -13,7 +13,7 @@ void Simulator::executeStep()
 	case communication:
 		executeEvolutionaryStep();
 		break;
-	case evolutionary:
+	case evolution:
 		executeCommunicationStep();
 		break;
 	default:
@@ -31,5 +31,16 @@ void Simulator::executeEvolutionaryStep()
 
 void Simulator::executeCommunicationStep()
 {
-	//TODO
+	for (auto processor : network_.getProcessors())
+	{
+		processor->collectOutput();
+	}
+	for (auto processor : network_.getProcessors())
+	{
+		auto message = processor->flushOutput();
+		for (auto neighbour : network_.getNeighbours(processor))
+		{
+			neighbour->receive(message);
+		}
+	}
 }

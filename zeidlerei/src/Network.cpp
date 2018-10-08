@@ -27,3 +27,8 @@ const std::vector<Processor*>& Network::getProcessors()
 {
 	return nodes_;
 }
+
+const std::vector<Processor*>& Network::getNeighbours(Processor* processor)
+{
+	return connections_[processor];
+}
