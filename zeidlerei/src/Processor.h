@@ -21,6 +21,10 @@ public:
 			}
 			return stream;
 		}
+
+		bool operator==(const Configuration& other) const {
+			return wordSet == other.wordSet;
+		}
 	};
 
 	Processor(const std::vector<Word>& initialSet, std::vector<std::shared_ptr<Rule> >& ruleSet,

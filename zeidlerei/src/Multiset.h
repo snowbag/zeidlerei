@@ -5,6 +5,14 @@ template <class T>
 class Multiset
 {
 public:
+	friend std::ostream& operator<< (std::ostream& stream, const Multiset& multiset) {
+		for (auto p : multiset)
+		{
+			stream << "word: " << p.first.getContent() << "; count: " << p.second << "\n";
+		}
+		return stream;
+	}
+
 	void add(const T& element, const unsigned int& count = 1)
 	{
 		content_[element] += count;
@@ -42,8 +50,12 @@ public:
 	auto begin() const { return content_.begin(); }
 	auto end() const { return content_.end(); }
 
-	bool operator==(const Multiset<T>& rhs) const {
-		return content_ == rhs.content_;
+	bool operator==(const Multiset<T>& other) const {
+		return content_ == other.content_;
+	}
+
+	bool operator!=(const Multiset<T>& other) const {
+		return !(*this == other);
 	}
 
 	int size() const {
