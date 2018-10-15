@@ -5,6 +5,15 @@ Simulator::~Simulator()
 {
 }
 
+void Simulator::executeSimulation(HaltingCondition& condition)
+{
+	while (!condition.isTrue())
+	{
+		executeStep();
+		condition.calculate(network_);
+	}
+}
+
 void Simulator::executeStep()
 {
 	switch (lastStepType_)
@@ -12,13 +21,16 @@ void Simulator::executeStep()
 	case initial:
 	case communication:
 		executeEvolutionaryStep();
+		lastStepType_ = evolution;
 		break;
 	case evolution:
 		executeCommunicationStep();
+		lastStepType_ = communication;
 		break;
 	default:
 		throw std::domain_error("Unhandled step type.");
 	}
+	
 }
 
 void Simulator::executeEvolutionaryStep()
