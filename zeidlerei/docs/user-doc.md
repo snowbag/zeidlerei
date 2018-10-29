@@ -8,9 +8,9 @@ The current release is an alpha version zeidlerei-0.1. A binary version for Wind
 
 Currently Zeidlerei is a simulator for NEPs. This means that you can create:
 - evolutionary processors with
--- evolutionary rules (insertion, deletion, substitution with the position of left and right),
--- input and output filters (no filter, length filter, regular expression filter and permitting/forbidding context) and
--- clustering method (the smallest cluster is chosen for communication),
+   - evolutionary rules (insertion, deletion, substitution with the position of left and right),
+   - input and output filters (no filter, length filter, regular expression filter and permitting/forbidding context) and
+   - clustering method (the smallest cluster is chosen for communication),
 - you can create undirected edges between them and
 - you can create multiple halting conditions for the simulation (maximum number of steps, two consecutive configurations are the same, an output node becomes non empty).
 
@@ -18,11 +18,14 @@ Currently Zeidlerei is a simulator for NEPs. This means that you can create:
 
 You can specify a NEP and a configuration in an XML format. Only NEP is required as in the NEP definition there is an initial configuration described. Then you can run your simulation with `zeidlerei-0.1` using this command:
 
-```> ./zeidlerei-0.1 nep.xml```
+```
+> ./zeidlerei-0.1 nep.xml
+```
 
 This will print the halting configuration to the standard output after the simulation is executed (meaning a halting condition became true).
 
 You can also use some options and flags:
+
 | Options | Parameter | Description |
 |--------|-----------|-------------|
 |-c | filename | existing configuration file in XML format; the simulation will start from the last configuration described in this file |
@@ -31,11 +34,15 @@ You can also use some options and flags:
 |-s| string | if an output file is set, this string will be used as string separator (default: `,`)
 
 Example usage of all options:
-```> ./zeidlerei-0.1 nep.xml -c conf.xml -o result.xml -s ';' --outputall```
+
+```
+> ./zeidlerei-0.1 nep.xml -c conf.xml -o result.xml -s ';' --outputall
+```
 
 **Keep in mind that if your simulation has many steps, printing every configuration will have a large effect on the run time.**
 
 If any of the XML files is not valid, you can get an error code from our external component, TinyXML. Here are some common errors:
+
 | Error code | Definition |
 |------------:|------------|
 | 3 | file not found |
@@ -53,6 +60,7 @@ The elements are defined between `<network></network>`tags. There are three requ
 - halting conditions `<halting-conditions></halting-conditions>`
 
 *Processors*
+
 For all processors you can define a word-separator character, which will be used to split the axioms. The default character is comma(`,`). This character is an attribute of the processors tag: `<processors word-separator=";">`
 
 A processor has a description between `<node id="..."></node>`. An identifier can be any string (even only numbers). A node also can have an initial content defined in the `content` attribute. This must be a list of words, separated by the word separator defined in the `processors` tag (default is comma). If the `content` is not defined, the processor is initially empty.
@@ -64,9 +72,11 @@ The input and output filter of a processor can be a length filter (with a rule o
 An other optional property of  a processor is a clustering method. If you use clustering in a node, only the words in the smallest cluster will be used in the communication. The currently available clustering methods are k-means and hierarchical bottom up clustering with k clusters. You can also define a maximum number of steps for k-means as an optional attribute. The definition of a clustering method is the following: `<clustering method="[k-means|bottom-up]" number="int" max-steps="int" />`
 
 *Graph*
+
 In the graph you must use the same ids as in the processor definitions. Using other ids will result in an error. For defining an edge you must use the `edge` tag with `v1` and `v2` attributes. Edges are bidirectional, so it is the same if you define `v1="1" v2="2"` or `v1="2" v2="1"`, therefore it is recommended to give the ids in alphabetical or numerical order. The format of an edge: `<edge v1="processor1Id" v2="processor2Id" />`
 
 *Halting Conditions*
+
 You can define multiple halting conditions for a simulation. The simulator will halt if any of them become true.
 
 The simulation can stop
@@ -126,7 +136,7 @@ An example description:
 ## XML description of a configuration
 The elements are defined between `<configuration><processors></processors></configuration>` tags. You do not have to describe the content of all nodes, the omitted ones will be empty.
 
-The description of a node is similar to the NEP description: you have to use the same ids and the content must be separated by the word separator. You can change the default word separator (comma `,`) as an attribute of the configuration. You can omit the content tag if the node is empty. A node configuration description is the following: `<node id="processorId" content="words separated by word-separator" />`
+The description of a node is similar to the NEP description: you have to use the same ids and the content must be separated by the word separator. You can change the default word separator (comma `,`) as an attribute of the configuration. You can omit the content tag if the node is empty. A node configuration description is the following: `<node id="processorId" content="words,separated,by,word-separator" />`
 
 You can also define if a configuration is initial, or is it after an evolutionary or communication step. This is also an attribute of the configuration:
 `<configuration type="[initial|evolution|communication]" word-separator="string">...</configuration>`. If you do not specify it, the default configuration type is initial.
