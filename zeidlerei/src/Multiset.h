@@ -1,5 +1,7 @@
 #pragma once
 #include <map>
+#include <algorithm>
+#include <iostream>
 
 template <class T>
 class Multiset
@@ -65,6 +67,11 @@ public:
 		});
 		return sum;
 	}
+
+	int numberOfUniques() const {
+		return content_.size();
+	}
+
 private:
 	std::map<T, unsigned int> content_;
 };
