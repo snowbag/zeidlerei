@@ -1,6 +1,4 @@
-#include "stdafx.h"
 #include "MaximumStepsHaltingCondition.h"
-
 
 MaximumStepsHaltingCondition::MaximumStepsHaltingCondition(const int& steps) : stepsLeft_(steps)
 {

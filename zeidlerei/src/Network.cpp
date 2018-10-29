@@ -1,10 +1,9 @@
-#include "stdafx.h"
 #include "Network.h"
 
 #include <algorithm>
 
 
-Network::Network(std::vector<Processor*> processors, std::vector<Edge> edges)
+Network::Network(std::vector<std::shared_ptr<Processor>> processors, std::vector<Edge> edges)
 {
 	nodes_ = processors;
 	for (auto e : edges) {
@@ -23,12 +22,12 @@ bool Network::hasEdge(const Edge& edge)
 	return std::find(v.begin(),v.end(), edge.right) != v.end();
 }
 
-const std::vector<Processor*>& Network::getProcessors()
+const std::vector<std::shared_ptr<Processor>>& Network::getProcessors()
 {
 	return nodes_;
 }
 
-const std::vector<Processor*>& Network::getNeighbours(Processor* processor)
+const std::vector<std::shared_ptr<Processor>>& Network::getNeighbours(std::shared_ptr<Processor> processor)
 {
 	return connections_[processor];
 }

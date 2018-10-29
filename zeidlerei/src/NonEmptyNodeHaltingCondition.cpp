@@ -1,8 +1,7 @@
-#include "stdafx.h"
 #include "NonEmptyNodeHaltingCondition.h"
 
 
-NonEmptyNodeHaltingCondition::NonEmptyNodeHaltingCondition(Processor* outputNode)
+NonEmptyNodeHaltingCondition::NonEmptyNodeHaltingCondition(std::shared_ptr<Processor> outputNode)
 	: outputNode_(outputNode), becameNonEmpty_(false)
 {
 }

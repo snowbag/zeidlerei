@@ -1,6 +1,4 @@
-#include "stdafx.h"
 #include "LeftSubstitutionRule.h"
-
 
 std::vector<Word> LeftSubstitutionRule::apply(Word& word) const
 {

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "LeftInsertionRule.h"
 
 std::vector<Word> LeftInsertionRule::apply(Word& word) const {

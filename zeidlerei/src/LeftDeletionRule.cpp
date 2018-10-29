@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "LeftDeletionRule.h"
 
 std::vector<Word> LeftDeletionRule::apply(Word& word) const

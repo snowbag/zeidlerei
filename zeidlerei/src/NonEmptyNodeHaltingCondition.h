@@ -4,12 +4,12 @@
 class NonEmptyNodeHaltingCondition : public HaltingCondition
 {
 public:
-	NonEmptyNodeHaltingCondition(Processor* outputNode);
+	NonEmptyNodeHaltingCondition(std::shared_ptr<Processor> outputNode);
 	void calculate(const Network& network) override;
 	bool isTrue() const override;
 private:
 	const Multiset<Word> emptySet_;
-	Processor* outputNode_;
+	std::shared_ptr<Processor> outputNode_;
 	bool becameNonEmpty_;
 };
 

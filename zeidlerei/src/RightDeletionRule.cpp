@@ -1,6 +1,4 @@
-#include "stdafx.h"
 #include "RightDeletionRule.h"
-
 
 std::vector<Word> RightDeletionRule::apply(Word& word) const
 {

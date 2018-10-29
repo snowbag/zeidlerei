@@ -1,6 +1,4 @@
-#include "stdafx.h"
 #include "RegexFilter.h"
-
 
 RegexFilter::RegexFilter(const std::string& re)
 	: regex_(re)

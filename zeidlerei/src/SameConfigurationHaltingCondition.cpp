@@ -1,6 +1,4 @@
-#include "stdafx.h"
 #include "SameConfigurationHaltingCondition.h"
-
 
 SameConfigurationHaltingCondition::SameConfigurationHaltingCondition(const Network& network)
 	: firstAlteringStep_ (network.exportConfiguration()), firstIsNext_(false), becameSame_(false)
