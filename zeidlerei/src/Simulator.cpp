@@ -1,17 +1,30 @@
-#include "stdafx.h"
 #include "Simulator.h"
+
+#include <algorithm>
 
 Simulator::~Simulator()
 {
 }
 
-void Simulator::executeSimulation(HaltingCondition& condition)
+void Simulator::executeSimulation(const std::vector<std::shared_ptr<HaltingCondition> > conditions)
 {
-	while (!condition.isTrue())
+	while (std::none_of(conditions.begin(), conditions.end(), [](std::shared_ptr<HaltingCondition> c) {return c->isTrue(); }))
 	{
 		executeStep();
-		condition.calculate(network_);
+		std::for_each(conditions.begin(), conditions.end(), [&network = network_](std::shared_ptr<HaltingCondition> c) {return c->calculate(network); });
 	}
+}
+
+std::vector<Simulator::Log> Simulator::executeSimulationWithLog(const std::vector<std::shared_ptr<HaltingCondition> > conditions)
+{
+	std::vector<Log> logs;
+	while (std::none_of(conditions.begin(), conditions.end(), [](std::shared_ptr<HaltingCondition> c) {return c->isTrue(); }))
+	{
+		executeStep();
+		std::for_each(conditions.begin(), conditions.end(), [&network = network_](std::shared_ptr<HaltingCondition> c) {return c->calculate(network); });
+		logs.push_back(Log{ lastStepType_, network_.exportConfiguration() });
+	}
+	return logs;
 }
 
 void Simulator::executeStep()
@@ -55,4 +68,8 @@ void Simulator::executeCommunicationStep()
 			neighbour->receive(message);
 		}
 	}
+}
+
+Simulator::StepType Simulator::getLastStepType() const {
+	return lastStepType_;
 }
