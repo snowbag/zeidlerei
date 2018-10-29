@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <string>
 
 #include "Word.h"
 #include "Rule.h"
@@ -12,9 +13,11 @@ class Processor
 {
 public:
 	struct Configuration {
+		std::string processorId;
 		Multiset<Word> wordSet;
-		Configuration(const Multiset<Word>& wordSet) : wordSet(wordSet) {}
+		Configuration(const std::string processorId, const Multiset<Word>& wordSet) : processorId(processorId), wordSet(wordSet) {}
 		friend std::ostream& operator<< (std::ostream& stream, const Configuration& config) {
+			stream << "processor id: " << (config.processorId != "" ? config.processorId : "none") << "\n";
 			for (auto p : config.wordSet)
 			{
 				stream << "word: " << p.first.getContent() << "; count: " << p.second << "\n";
@@ -28,7 +31,7 @@ public:
 	};
 
 	Processor(const std::vector<Word>& initialSet, std::vector<std::shared_ptr<Rule> >& ruleSet,
-		const std::shared_ptr<Filter>& inputFilter, const std::shared_ptr<Filter>& outputFilter);
+		const std::shared_ptr<Filter>& inputFilter, const std::shared_ptr<Filter>& outputFilter, const std::string& id = "");
 	virtual void evolve();
 	virtual void receive(const Multiset<Word>& inputWords);
 	virtual void collectOutput();
@@ -40,5 +43,6 @@ protected:
 	std::shared_ptr<Filter> inputFilter_;
 	std::shared_ptr<Filter> outputFilter_;
 	Multiset<Word> output_;
+	std::string id_;
 };
 

@@ -1,12 +1,10 @@
-#include "stdafx.h"
 #include "Processor.h"
 
 #include <set>
 
-
 Processor::Processor(const std::vector<Word>& initialSet, std::vector<std::shared_ptr<Rule> >& ruleSet,
-	const std::shared_ptr<Filter>& inputFilter, const std::shared_ptr<Filter>& outputFilter)
-	: ruleSet_(ruleSet), inputFilter_(inputFilter), outputFilter_(outputFilter)
+	const std::shared_ptr<Filter>& inputFilter, const std::shared_ptr<Filter>& outputFilter, const std::string& id)
+	: ruleSet_(ruleSet), inputFilter_(inputFilter), outputFilter_(outputFilter), id_(id)
 {
 	for (auto w : initialSet) {
 		wordSet_.add(w);
@@ -76,5 +74,5 @@ Multiset<Word> Processor::flushOutput()
 
 Processor::Configuration Processor::exportConfiguration()
 {
-	return Configuration(wordSet_);
+	return Configuration(id_, wordSet_);
 }
