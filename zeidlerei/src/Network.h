@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "Processor.h"
-
+#include "ClusteredProcessor.h"
 class Network
 {
 public:
@@ -14,10 +14,10 @@ public:
 		Edge(std::shared_ptr<Processor> l, std::shared_ptr<Processor> r) : left(l), right(r) {}
 	};
 	struct Configuration {
-		std::vector<Processor::Configuration> nodes;
+		std::vector<std::shared_ptr<Processor::Configuration> > nodes;
 		Configuration(const std::vector<std::shared_ptr<Processor>>& processors = std::vector<std::shared_ptr<Processor>>())
 		{
-			for (auto processor : processors)
+			for (auto&& processor : processors)
 			{
 				nodes.push_back(processor->exportConfiguration());
 			}
@@ -26,7 +26,7 @@ public:
 		friend std::ostream& operator<< (std::ostream& stream, const Configuration& config) {
 			for (auto&& node : config.nodes)
 			{
-				stream << node << "\n";
+				stream << *node << "\n";
 			}
 			return stream;
 		}

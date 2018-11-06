@@ -9,6 +9,8 @@
 #include "Filter.h"
 #include "Multiset.h"
 
+class ConfigurationVisitor;
+
 class Processor
 {
 public:
@@ -25,9 +27,11 @@ public:
 			return stream;
 		}
 
-		bool operator==(const Configuration& other) const {
+		virtual bool operator==(const Configuration& other) const {
 			return wordSet == other.wordSet;
 		}
+
+		virtual void accept(ConfigurationVisitor* visitor);
 	};
 
 	Processor(const std::vector<Word>& initialSet, std::vector<std::shared_ptr<Rule> >& ruleSet,
@@ -36,7 +40,7 @@ public:
 	virtual void receive(const Multiset<Word>& inputWords);
 	virtual void collectOutput();
 	virtual Multiset<Word> flushOutput();
-	virtual Configuration exportConfiguration();
+	virtual std::shared_ptr<Configuration> exportConfiguration();
 protected:
 	Multiset<Word> wordSet_;
 	std::vector<std::shared_ptr<Rule> > ruleSet_;

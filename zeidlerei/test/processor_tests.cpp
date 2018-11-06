@@ -27,7 +27,7 @@ TEST(Processors, EvolveWords)
 	expected.add(Word("aaa"));
 
 	p.evolve();
-	Processor::Configuration config = p.exportConfiguration();
+	Processor::Configuration config = *p.exportConfiguration();
 	ASSERT_EQ(config.wordSet, expected);
 }
 
@@ -45,5 +45,5 @@ TEST(Processors, CommunicateAllWords)
 
 	p.collectOutput();
 	ASSERT_EQ(p.flushOutput(), expected);
-	ASSERT_EQ(p.exportConfiguration().wordSet, emptySet);
+	ASSERT_EQ(p.exportConfiguration()->wordSet, emptySet);
 }

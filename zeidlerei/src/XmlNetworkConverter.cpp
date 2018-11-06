@@ -84,6 +84,11 @@ const char* BOTTOMUP_CLUSTERING_TYPE = "bottom-up";
 const char* CLUSTERING_NUMBER_ATTR = "number";
 const char* CLUSTERING_MAX_STEPS_ATTR = "max-steps";
 
+const char* CLUSTER_GROUP_TAG = "clusters";
+const char* CLUSTER_TAG = "cluster";
+const char* CLUSTER_ID_ATTR = "id";
+const char* CLUSTER_CONTENT_ATTR = "content";
+
 using namespace tinyxml2;
 
 std::vector<Word> XmlNetworkConverter::createWordset(const std::string& axiom, const std::string& separator) {
@@ -342,7 +347,7 @@ void XmlNetworkConverter::saveFullLog(std::vector<Simulator::Log> logs, const ch
 {
 	XMLDocument doc;
 	for (auto&& l : logs) {
-		insertConfigurationElement(doc, l.lastStepType, l.configuration, wordSeparator);
+		insertNetworkConfigurationElement(doc, l.lastStepType, l.configuration, wordSeparator);
 	}
 	doc.SaveFile(fileName);
 }
@@ -352,11 +357,38 @@ void XmlNetworkConverter::saveConfiguration(const Simulator& simulator, const Ne
 	XMLDocument doc;
 	Simulator::StepType lastStepType = simulator.getLastStepType();
 	Network::Configuration configuration = network.exportConfiguration();
-	insertConfigurationElement(doc, lastStepType, configuration, wordSeparator);
+	insertNetworkConfigurationElement(doc, lastStepType, configuration, wordSeparator);
 	doc.SaveFile(fileName);
 }
 
-void XmlNetworkConverter::insertConfigurationElement(XMLDocument& doc, const Simulator::StepType& lastStepType, const Network::Configuration& configuration, const char* wordSeparator)
+void XmlNetworkConverter::ProcessorConfigurationConverter::insertElement(XMLDocument& doc, XMLElement* parentNode, const ClusteredProcessor::Configuration& configuration, const char* wordSeparator)
+{
+	XMLElement* nodeElement = doc.NewElement(PROCESSOR_TAG);
+	nodeElement->SetAttribute(PROCESSOR_ID_ATTR, configuration.processorId.c_str());
+	std::string content = convertMultisetToString(configuration.wordSet, wordSeparator);
+	nodeElement->SetAttribute(PROCESSOR_CONTENT_ATTR, content.c_str());
+	XMLElement* clustersElement = doc.NewElement(CLUSTER_GROUP_TAG);
+	nodeElement->InsertEndChild(clustersElement);
+	for (int i=0;i<configuration.clusters.size();++i)
+	{
+		XMLElement* clusterElement = doc.NewElement(CLUSTER_TAG);
+		clusterElement->SetAttribute(CLUSTER_ID_ATTR, i);
+		std::string clusterContent = convertVectorToString(configuration.clusters[i].points, wordSeparator);
+		clusterElement->SetAttribute(CLUSTER_CONTENT_ATTR, clusterContent.c_str());
+		clustersElement->InsertEndChild(clusterElement);
+	}
+	parentNode->InsertEndChild(nodeElement);
+}
+void XmlNetworkConverter::ProcessorConfigurationConverter::insertElement(XMLDocument& doc, XMLElement* parentNode, const Processor::Configuration& configuration, const char* wordSeparator)
+{
+	XMLElement* nodeElement = doc.NewElement(PROCESSOR_TAG);
+	nodeElement->SetAttribute(PROCESSOR_ID_ATTR, configuration.processorId.c_str());
+	std::string content = convertMultisetToString(configuration.wordSet, wordSeparator);
+	nodeElement->SetAttribute(PROCESSOR_CONTENT_ATTR, content.c_str());
+	parentNode->InsertEndChild(nodeElement);
+}
+
+void XmlNetworkConverter::insertNetworkConfigurationElement(XMLDocument& doc, const Simulator::StepType& lastStepType, const Network::Configuration& configuration, const char* wordSeparator)
 {
 	XMLElement* configurationElement = doc.NewElement(CONFIGURATION_TAG);
 	const char* stepTypeAttr = stepTypeToString(lastStepType);
@@ -365,13 +397,21 @@ void XmlNetworkConverter::insertConfigurationElement(XMLDocument& doc, const Sim
 	doc.InsertEndChild(configurationElement);
 	XMLElement* processorsElement = doc.NewElement(PROCESSOR_GROUP_TAG);
 	configurationElement->InsertEndChild(processorsElement);
-	for (auto pc : configuration.nodes) {
-		XMLElement* nodeElement = doc.NewElement(PROCESSOR_TAG);
-		nodeElement->SetAttribute(PROCESSOR_ID_ATTR, pc.processorId.c_str());
-		std::string content = convertMultisetToString(pc.wordSet, wordSeparator);
-		nodeElement->SetAttribute(PROCESSOR_CONTENT_ATTR, content.c_str());
-		processorsElement->InsertEndChild(nodeElement);
+	ProcessorConfigurationConverter converter { doc, processorsElement, wordSeparator };
+	for (auto&& pc : configuration.nodes) {
+		pc->accept(&converter);
+		//insertProcessorConfigurationElement(doc, processorsElement, *pc, wordSeparator);
 	}
+}
+
+std::string XmlNetworkConverter::convertVectorToString(const std::vector<Word>& words, const char* wordSeparator) {
+	std::ostringstream os;
+	const char* separator = "";
+	for (auto&& w : words) {
+		os << separator << w.getContent();
+		separator = wordSeparator;
+	}
+	return os.str();
 }
 
 std::string XmlNetworkConverter::convertMultisetToString(const Multiset<Word>& multiset, const char* wordSeparator) {

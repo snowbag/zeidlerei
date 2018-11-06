@@ -33,8 +33,8 @@ TEST(Simulators, ExecuteOneEvolutionaryStep)
 	expected1.add(Word("ac"));
 	expected2.add(Word(""));
 	expected2.add(Word("a"));
-	ASSERT_EQ(p1->exportConfiguration().wordSet, expected1);
-	ASSERT_EQ(p2->exportConfiguration().wordSet, expected2);
+	ASSERT_EQ(p1->exportConfiguration()->wordSet, expected1);
+	ASSERT_EQ(p2->exportConfiguration()->wordSet, expected2);
 }
 
 TEST(Simulators, ExecuteOneCommunicationStep)
@@ -55,8 +55,8 @@ TEST(Simulators, ExecuteOneCommunicationStep)
 	expected1.add(Word("ac"));
 	expected2.add(Word(""));
 	expected2.add(Word("a"));
-	ASSERT_EQ(p1->exportConfiguration().wordSet, expected1);
-	ASSERT_EQ(p2->exportConfiguration().wordSet, expected2);
+	ASSERT_EQ(p1->exportConfiguration()->wordSet, expected1);
+	ASSERT_EQ(p2->exportConfiguration()->wordSet, expected2);
 }
 
 TEST(Simulators, ExecuteLeftRightInsertionSimulation)
@@ -79,8 +79,8 @@ TEST(Simulators, ExecuteLeftRightInsertionSimulation)
 	expected1.add(Word("ccad"));
 	expected2.add(Word("cbdd"));
 
-	ASSERT_EQ(p1->exportConfiguration().wordSet, expected1);
-	ASSERT_EQ(p2->exportConfiguration().wordSet, expected2);
+	ASSERT_EQ(p1->exportConfiguration()->wordSet, expected1);
+	ASSERT_EQ(p2->exportConfiguration()->wordSet, expected2);
 }
 
 TEST(Simulators, HaltWithSameConsecutiveSteps)
@@ -105,8 +105,8 @@ TEST(Simulators, HaltWithSameConsecutiveSteps)
 	expected2.add(Word("b"));
 	expected2.add(Word(""));
 
-	ASSERT_EQ(p1->exportConfiguration().wordSet, expected1);
-	ASSERT_EQ(p2->exportConfiguration().wordSet, expected2);
+	ASSERT_EQ(p1->exportConfiguration()->wordSet, expected1);
+	ASSERT_EQ(p2->exportConfiguration()->wordSet, expected2);
 }
 
 TEST(Simulators, HaltWithOutputNode)
@@ -130,6 +130,6 @@ TEST(Simulators, HaltWithOutputNode)
 	expected1.add(Word("ccca"));
 	expected2.add(Word("cccab"));
 
-	ASSERT_EQ(p1->exportConfiguration().wordSet, expected1);
-	ASSERT_EQ(p2->exportConfiguration().wordSet, expected2);
+	ASSERT_EQ(p1->exportConfiguration()->wordSet, expected1);
+	ASSERT_EQ(p2->exportConfiguration()->wordSet, expected2);
 }

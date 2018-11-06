@@ -9,7 +9,7 @@ NonEmptyNodeHaltingCondition::NonEmptyNodeHaltingCondition(std::shared_ptr<Proce
 void NonEmptyNodeHaltingCondition::calculate(const Network& network)
 {
 	auto content = outputNode_->exportConfiguration();
-	becameNonEmpty_ |= content.wordSet != emptySet_;
+	becameNonEmpty_ |= content->wordSet != emptySet_;
 }
 
 bool NonEmptyNodeHaltingCondition::isTrue() const

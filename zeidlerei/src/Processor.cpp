@@ -2,6 +2,8 @@
 
 #include <set>
 
+#include "Visitor.h"
+
 Processor::Processor(const std::vector<Word>& initialSet, std::vector<std::shared_ptr<Rule> >& ruleSet,
 	const std::shared_ptr<Filter>& inputFilter, const std::shared_ptr<Filter>& outputFilter, const std::string& id)
 	: ruleSet_(ruleSet), inputFilter_(inputFilter), outputFilter_(outputFilter), id_(id)
@@ -72,7 +74,11 @@ Multiset<Word> Processor::flushOutput()
 	return sentWords;
 }
 
-Processor::Configuration Processor::exportConfiguration()
+std::shared_ptr<Processor::Configuration> Processor::exportConfiguration()
 {
-	return Configuration(id_, wordSet_);
+	return std::make_shared<Configuration>(id_, wordSet_);
+}
+
+void Processor::Configuration::accept(ConfigurationVisitor* visitor) {
+	return visitor->visit(*this);
 }
