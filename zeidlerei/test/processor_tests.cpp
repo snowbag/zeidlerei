@@ -23,7 +23,7 @@ TEST(Processors, EvolveWords)
 	
 	Multiset<Word> expected;
 	expected.add(Word("a"));
-	expected.add(Word("aa"));
+	expected.add(Word("aa"), 2);
 	expected.add(Word("aaa"));
 
 	p.evolve();

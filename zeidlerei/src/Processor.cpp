@@ -16,14 +16,16 @@ Processor::Processor(const std::vector<Word>& initialSet, std::vector<std::share
 void Processor::evolve()
 {
 	std::set<Word> usedWords;
-	std::set<Word> createdWords;
+	Multiset<Word> createdWords;
 	for (auto p : wordSet_) { //TODO: iterator on wordset keys
 		Word w = p.first;
 		for (auto r : ruleSet_) {
 			if (r->isApplicable(w)) {
 				usedWords.insert(w);
 				auto result = r->apply(w);
-				createdWords.insert(result.begin(),result.end());
+				for (auto&& newWord : result) {
+					createdWords.add(newWord, p.second);
+				}
 			}
 		}
 	}
@@ -31,15 +33,12 @@ void Processor::evolve()
 	for (auto p : wordSet_) {
 		Word w = p.first;
 		if (usedWords.count(w) == 0) {
-			createdWords.insert(w);
+			createdWords.add(w, p.second);
 		}
 	}
 
 	wordSet_.clear();
-
-	for (auto w : createdWords) {
-		wordSet_.add(w);
-	}
+	wordSet_ = createdWords;
 }
 
 void Processor::receive(const Multiset<Word>& inputWords)
