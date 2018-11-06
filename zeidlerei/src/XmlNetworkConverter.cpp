@@ -16,12 +16,16 @@
 #include "LengthFilter.h"
 #include "RegexFilter.h"
 #include "FreeFilter.h"
+#include "PermitForbidFilter.h"
 #include "LeftDeletionRule.h"
 #include "LeftInsertionRule.h"
 #include "LeftSubstitutionRule.h"
 #include "RightDeletionRule.h"
 #include "RightInsertionRule.h"
 #include "RightSubstitutionRule.h"
+#include "AnyDeletionRule.h"
+#include "AnyInsertionRule.h"
+#include "AnySubstitutionRule.h"
 #include "Network.h"
 #include "Simulator.h"
 #include "ClusteringProcess.h"
@@ -115,6 +119,9 @@ std::shared_ptr<Rule> XmlNetworkConverter::createRuleInstance(XMLElement* ruleEl
 		else if (position == RULE_RIGHT_POSITION_ATTR) {
 			return std::make_shared<RightInsertionRule>(RightInsertionRule(rhs));
 		}
+		else if (position == RULE_ANY_POSITION_ATTR) {
+			return std::make_shared<AnyInsertionRule>(AnyInsertionRule(rhs));
+		}
 	}
 	else if (ruleType == DELETION_RULE_TYPE) {
 		std::string lhs = ruleElement->Attribute(RULE_LHS);
@@ -123,6 +130,9 @@ std::shared_ptr<Rule> XmlNetworkConverter::createRuleInstance(XMLElement* ruleEl
 		}
 		else if (position == RULE_RIGHT_POSITION_ATTR) {
 			return std::make_shared<RightDeletionRule>(RightDeletionRule(lhs));
+		}
+		else if (position == RULE_ANY_POSITION_ATTR) {
+			return std::make_shared<AnyDeletionRule>(AnyDeletionRule(lhs));
 		}
 	}
 	else if (ruleType == SUBSTITUTION_RULE_TYPE) {
@@ -133,6 +143,9 @@ std::shared_ptr<Rule> XmlNetworkConverter::createRuleInstance(XMLElement* ruleEl
 		}
 		else if (position == RULE_RIGHT_POSITION_ATTR) {
 			return std::make_shared<RightSubstitutionRule>(RightSubstitutionRule(lhs, rhs));
+		}
+		else if (position == RULE_ANY_POSITION_ATTR) {
+			return std::make_shared<AnySubstitutionRule>(AnySubstitutionRule(lhs, rhs));
 		}
 	}
 	throw std::domain_error("Unhandled rule type: " + ruleType);
@@ -171,7 +184,8 @@ std::shared_ptr<Filter> XmlNetworkConverter::createFilterInstance(XMLElement* fi
 			filter = std::make_shared<FreeFilter>(FreeFilter());
 		}
 		else if (filterType == PERMIT_FORBID_FILTER_TYPE) {
-			throw std::domain_error("Unhandled inputfilter type."); //TODO
+			std::string rule = filterElement->Attribute(FILTER_DETAILS_ATTR);
+			filter = std::make_shared<PermitForbidFilter>(PermitForbidFilter(rule));
 		}
 		else {
 			throw std::domain_error("Unhandled inputfilter type.");
@@ -400,7 +414,6 @@ void XmlNetworkConverter::insertNetworkConfigurationElement(XMLDocument& doc, co
 	ProcessorConfigurationConverter converter { doc, processorsElement, wordSeparator };
 	for (auto&& pc : configuration.nodes) {
 		pc->accept(&converter);
-		//insertProcessorConfigurationElement(doc, processorsElement, *pc, wordSeparator);
 	}
 }
 
