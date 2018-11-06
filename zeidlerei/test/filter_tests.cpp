@@ -5,6 +5,7 @@
 #include "FreeFilter.h"
 #include "LengthFilter.h"
 #include "RegexFilter.h"
+#include "PermitForbidFilter.h"
 
 #include "gtest/gtest.h"
 
@@ -46,6 +47,18 @@ TEST(Filters, PrefixAlphanumericSuffixAb) {
 	RegexFilter f("(\\S+ab)");
 	for (auto w : goodWords) {
 		ASSERT_TRUE(f.apply(w));
+	}
+	for (auto w : badWords) {
+		ASSERT_FALSE(f.apply(w));
+	}
+}
+
+TEST(Filters, PermitForbidFilter) {
+	std::vector<Word> goodWords = { Word("caaaab"), Word("abc"), Word("12ab34c"), Word("c((???ab") };
+	std::vector<Word> badWords = { Word("ab"), Word("c"), Word("abcd"), Word("abac") };
+	PermitForbidFilter f({ "ab", "c" }, { "ba", "d" });
+	for (auto w : goodWords) {
+		ASSERT_TRUE(f.apply(w)) << w.getContent() << " returns false";
 	}
 	for (auto w : badWords) {
 		ASSERT_FALSE(f.apply(w));
