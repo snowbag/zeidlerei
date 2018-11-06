@@ -8,6 +8,7 @@ class PermitForbidFilter :
 	public Filter
 {
 public:
+	PermitForbidFilter(const std::string& rule);
 	PermitForbidFilter(const std::vector<std::string>& required, const std::vector<std::string>& forbidden);
 	virtual bool apply(Word& word) const;
 private:

@@ -53,7 +53,7 @@ TEST(Filters, PrefixAlphanumericSuffixAb) {
 	}
 }
 
-TEST(Filters, PermitForbidFilter) {
+TEST(Filters, PermitForbid) {
 	std::vector<Word> goodWords = { Word("caaaab"), Word("abc"), Word("12ab34c"), Word("c((???ab") };
 	std::vector<Word> badWords = { Word("ab"), Word("c"), Word("abcd"), Word("abac") };
 	PermitForbidFilter f({ "ab", "c" }, { "ba", "d" });
@@ -63,4 +63,58 @@ TEST(Filters, PermitForbidFilter) {
 	for (auto w : badWords) {
 		ASSERT_FALSE(f.apply(w));
 	}
+}
+
+TEST(Filters, PermitForbidInitializers) {
+	std::vector<Word> goodWords = { Word("caaaab"), Word("abc"), Word("12ab34c"), Word("c((???ab") };
+	std::vector<Word> others = { Word("ab"), Word("c"), Word("abcd"), Word("abac") };
+	PermitForbidFilter f1("+ab+c-ba-d"), f2("+ab+c"), f3("-ba-d"), f4("+ab"), f5("-ba"), f6("+ab-ba"), f7("");
+
+	for (auto w : goodWords) {
+		EXPECT_TRUE(f1.apply(w)) << w.getContent() << " returns false";
+		EXPECT_TRUE(f2.apply(w)) << w.getContent() << " returns false";
+		EXPECT_TRUE(f3.apply(w)) << w.getContent() << " returns false";
+		EXPECT_TRUE(f4.apply(w)) << w.getContent() << " returns false";
+		EXPECT_TRUE(f5.apply(w)) << w.getContent() << " returns false";
+		EXPECT_TRUE(f6.apply(w)) << w.getContent() << " returns false";
+		EXPECT_TRUE(f7.apply(w)) << w.getContent() << " returns false";
+	}
+
+	int i = 0;
+	//ab
+	EXPECT_FALSE(f1.apply(others[i]));
+	EXPECT_FALSE(f2.apply(others[i]));
+	EXPECT_TRUE(f3.apply(others[i]));
+	EXPECT_TRUE(f4.apply(others[i]));
+	EXPECT_TRUE(f5.apply(others[i]));
+	EXPECT_TRUE(f6.apply(others[i]));
+	EXPECT_TRUE(f7.apply(others[i]));
+	++i;
+	//c
+	EXPECT_FALSE(f1.apply(others[i]));
+	EXPECT_FALSE(f2.apply(others[i]));
+	EXPECT_TRUE(f3.apply(others[i]));
+	EXPECT_FALSE(f4.apply(others[i]));
+	EXPECT_TRUE(f5.apply(others[i]));
+	EXPECT_FALSE(f6.apply(others[i]));
+	EXPECT_TRUE(f7.apply(others[i]));
+	++i;
+	//abcd
+	EXPECT_FALSE(f1.apply(others[i]));
+	EXPECT_TRUE(f2.apply(others[i]));
+	EXPECT_FALSE(f3.apply(others[i]));
+	EXPECT_TRUE(f4.apply(others[i]));
+	EXPECT_TRUE(f5.apply(others[i]));
+	EXPECT_TRUE(f6.apply(others[i]));
+	EXPECT_TRUE(f7.apply(others[i]));
+	++i;
+	//abac
+	EXPECT_FALSE(f1.apply(others[i]));
+	EXPECT_TRUE(f2.apply(others[i]));
+	EXPECT_FALSE(f3.apply(others[i]));
+	EXPECT_TRUE(f4.apply(others[i]));
+	EXPECT_FALSE(f5.apply(others[i]));
+	EXPECT_FALSE(f6.apply(others[i]));
+	EXPECT_TRUE(f7.apply(others[i]));
+	++i;
 }
