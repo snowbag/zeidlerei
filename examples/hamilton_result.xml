@@ -1,0 +1,225 @@
+<configurations>
+    <configuration type="evolution" word-separator=",">
+        <processors>
+            <node id="0" content="i0"/>
+            <node id="1" content=""/>
+            <node id="2" content=""/>
+            <node id="3" content=""/>
+            <node id="4" content=""/>
+            <node id="5" content=""/>
+            <node id="6" content=""/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="communication" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i0"/>
+            <node id="2" content=""/>
+            <node id="3" content="i0"/>
+            <node id="4" content=""/>
+            <node id="5" content=""/>
+            <node id="6" content="i0"/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="evolution" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i01"/>
+            <node id="2" content=""/>
+            <node id="3" content="i03"/>
+            <node id="4" content=""/>
+            <node id="5" content=""/>
+            <node id="6" content="i06"/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="communication" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i03"/>
+            <node id="2" content="i01,i03"/>
+            <node id="3" content="i01"/>
+            <node id="4" content="i01,i03"/>
+            <node id="5" content="i01,i06"/>
+            <node id="6" content=""/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="evolution" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i031"/>
+            <node id="2" content="i012,i032"/>
+            <node id="3" content="i013"/>
+            <node id="4" content="i014,i034"/>
+            <node id="5" content="i015,i065"/>
+            <node id="6" content=""/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="communication" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i032,i034,i065"/>
+            <node id="2" content="i013,i015,i031,i065"/>
+            <node id="3" content="i012,i014"/>
+            <node id="4" content="i013,i015,i031,i065"/>
+            <node id="5" content="i012,i014,i031,i032,i034"/>
+            <node id="6" content="i015"/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="evolution" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i0321,i0341,i0651"/>
+            <node id="2" content="i0132,i0152,i0312,i0652"/>
+            <node id="3" content="i0123,i0143"/>
+            <node id="4" content="i0134,i0154,i0314,i0654"/>
+            <node id="5" content="i0125,i0145,i0315,i0325,i0345"/>
+            <node id="6" content="i0156"/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="communication" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i0325,i0345,i0652,i0654"/>
+            <node id="2" content="i0143,i0145,i0315,i0341,i0345,i0651"/>
+            <node id="3" content="i0152,i0154,i0651,i0652,i0654"/>
+            <node id="4" content="i0123,i0125,i0315,i0321,i0325,i0651"/>
+            <node id="5" content="i0132,i0134,i0312,i0314,i0321,i0341"/>
+            <node id="6" content="i0125,i0145,i0315,i0325,i0345"/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="evolution" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i03251,i03451,i06521,i06541"/>
+            <node id="2" content="i01432,i01452,i03152,i03412,i03452,i06512"/>
+            <node id="3" content="i01523,i01543,i06513,i06523,i06543"/>
+            <node id="4" content="i01234,i01254,i03154,i03214,i03254,i06514"/>
+            <node id="5" content="i01325,i01345,i03125,i03145,i03215,i03415"/>
+            <node id="6" content="i01256,i01456,i03156,i03256,i03456"/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="communication" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i03254,i03452,i06523,i06543"/>
+            <node id="2" content="i01345,i01543,i03145,i03415,i03451,i06513,i06541,i06543"/>
+            <node id="3" content="i01254,i01452,i06512,i06514,i06521,i06541"/>
+            <node id="4" content="i01325,i01523,i03125,i03215,i03251,i06513,i06521,i06523"/>
+            <node id="5" content="i01234,i01432,i03214,i03412"/>
+            <node id="6" content="i01325,i01345,i03125,i03145,i03215,i03415"/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="evolution" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i032541,i034521,i065231,i065431"/>
+            <node id="2" content="i013452,i015432,i031452,i034152,i034512,i065132,i065412,i065432"/>
+            <node id="3" content="i012543,i014523,i065123,i065143,i065213,i065413"/>
+            <node id="4" content="i013254,i015234,i031254,i032154,i032514,i065134,i065214,i065234"/>
+            <node id="5" content="i012345,i014325,i032145,i034125"/>
+            <node id="6" content="i013256,i013456,i031256,i031456,i032156,i034156"/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="communication" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i065234,i065432"/>
+            <node id="2" content="i065143,i065413,i065431"/>
+            <node id="3" content="i065214,i065412"/>
+            <node id="4" content="i065123,i065213,i065231"/>
+            <node id="5" content=""/>
+            <node id="6" content="i012345,i014325,i032145,i034125"/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="evolution" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content="i0652341,i0654321"/>
+            <node id="2" content="i0651432,i0654132,i0654312"/>
+            <node id="3" content="i0652143,i0654123"/>
+            <node id="4" content="i0651234,i0652134,i0652314"/>
+            <node id="5" content=""/>
+            <node id="6" content="i0123456,i0143256,i0321456,i0341256"/>
+            <node id="7" content=""/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="communication" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content=""/>
+            <node id="2" content=""/>
+            <node id="3" content=""/>
+            <node id="4" content=""/>
+            <node id="5" content=""/>
+            <node id="6" content=""/>
+            <node id="7" content="i0123456"/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="evolution" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content=""/>
+            <node id="2" content=""/>
+            <node id="3" content=""/>
+            <node id="4" content=""/>
+            <node id="5" content=""/>
+            <node id="6" content=""/>
+            <node id="7" content="i0123456"/>
+            <node id="8" content=""/>
+        </processors>
+    </configuration>
+
+    <configuration type="communication" word-separator=",">
+        <processors>
+            <node id="0" content=""/>
+            <node id="1" content=""/>
+            <node id="2" content=""/>
+            <node id="3" content=""/>
+            <node id="4" content=""/>
+            <node id="5" content=""/>
+            <node id="6" content=""/>
+            <node id="7" content=""/>
+            <node id="8" content="i0123456"/>
+        </processors>
+    </configuration>
+</configurations>

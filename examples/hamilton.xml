@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<network>
+	<halting-conditions>
+		<condition type="NonEmptyNode" value="8"/>
+	</halting-conditions>
+
+	<processors word-separator=",">
+		<node id="0" content="i">
+			<rules type="insertion">
+				<rule position="right" to="0" />
+			</rules>
+			<inputfilter type="permit-forbid" rule="-0" />
+		</node>
+		<node id="1">
+			<rules type="insertion">
+				<rule position="right" to="1" />
+			</rules>
+			<inputfilter type="permit-forbid" rule="-1" />
+		</node>
+		<node id="2">
+			<rules type="insertion">
+				<rule position="right" to="2" />
+			</rules>
+			<inputfilter type="permit-forbid" rule="-2" />
+		</node>
+		<node id="3">
+			<rules type="insertion">
+				<rule position="right" to="3" />
+			</rules>
+			<inputfilter type="permit-forbid" rule="-3" />
+		</node>
+		<node id="4">
+			<rules type="insertion">
+				<rule position="right" to="4" />
+			</rules>
+			<inputfilter type="permit-forbid" rule="-4" />
+		</node>
+		<node id="5">
+			<rules type="insertion">
+				<rule position="right" to="5" />
+			</rules>
+			<inputfilter type="permit-forbid" rule="-5" />
+		</node>
+		<node id="6">
+			<rules type="insertion">
+				<rule position="right" to="6" />
+			</rules>
+			<inputfilter type="permit-forbid" rule="-6" />
+		</node>
+		<node id="7">
+			<inputfilter type="permit-forbid" rule="+i+0+1+2+3+4+5+6-30-10-60-14-15-25-43-31-54-65" />
+		</node>
+		<node id="8">
+			<inputfilter type="length" rule="=8" />
+		</node>
+	</processors>
+
+	<graph>
+		<edge v1="0" v2="1" />
+		<edge v1="0" v2="3" />
+		<edge v1="0" v2="6" />
+		<edge v1="1" v2="2" />
+		<edge v1="1" v2="3" />
+		<edge v1="1" v2="4" />
+		<edge v1="1" v2="5" />
+		<edge v1="2" v2="3" />
+		<edge v1="2" v2="5" />
+		<edge v1="3" v2="4" />
+		<edge v1="4" v2="5" />
+		<edge v1="5" v2="6" />
+		<edge v1="6" v2="7" />
+		<edge v1="7" v2="8" />
+	</graph>
+</network>
