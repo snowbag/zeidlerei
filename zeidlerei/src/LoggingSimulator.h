@@ -6,8 +6,8 @@ class LoggingSimulator : public Simulator
 public:
 	struct CommunicationSummary {
 		std::string processorId;
-		int numberOfReceived;
 		int numberOfSent;
+		int numberOfReceived;
 	};
 
 	LoggingSimulator(const Network& network, const StepType& lastStepType = initial)

@@ -85,6 +85,10 @@ const char* INITIAL_CONFIGURATION_TYPE = "initial";
 const char* EVOLUTION_CONFIGURATION_TYPE = "evolution";
 const char* COMMUNICATION_CONFIGURATION_TYPE = "communication";
 
+const char* TRAFFIC_TAG = "traffic-data";
+const char* SENT_TRAFFIC_ATTR = "sent";
+const char* RECEIVED_TRAFFIC_ATTR = "received";
+
 const char* CLUSTERING_TAG = "clustering";
 const char* CLUSTERING_TYPE_ATTR = "method";
 const char* KMEANS_CLUSTERING_TYPE = "k-means";
@@ -369,12 +373,15 @@ XmlNetworkConverter::Result XmlNetworkConverter::loadSimulation(const char* file
 	}
 }
 
-void XmlNetworkConverter::saveFullLog(std::vector<Simulator::Log> logs, const char* fileName, const char* wordSeparator)
+void XmlNetworkConverter::saveFullLog(std::vector<Simulator::Log> logs, std::vector<std::vector<LoggingSimulator::CommunicationSummary> > networkTraffic, const char* fileName, const char* wordSeparator)
 {
 	XMLDocument doc;
 	XMLElement* configurationGroup = doc.NewElement(CONFIGURATION_GROUP_TAG);
 	for (auto&& l : logs) {
 		insertNetworkConfigurationElement(doc, configurationGroup, l.lastStepType, l.configuration, wordSeparator);
+	}
+	for (auto&& s : networkTraffic) {
+		insertNetworkTrafficElement(doc, configurationGroup, s);
 	}
 	doc.InsertEndChild(configurationGroup);
 	doc.SaveFile(fileName);
@@ -429,6 +436,19 @@ void XmlNetworkConverter::insertNetworkConfigurationElement(XMLDocument& doc, XM
 	for (auto&& pc : configuration.nodes) {
 		pc->accept(&converter);
 	}
+}
+
+void XmlNetworkConverter::insertNetworkTrafficElement(XMLDocument& doc, XMLNode* container, const std::vector<LoggingSimulator::CommunicationSummary>& summary)
+{
+	XMLElement* trafficElement = doc.NewElement(TRAFFIC_TAG);
+	for (auto&& s : summary) {
+		XMLElement* processorElement = doc.NewElement(PROCESSOR_TAG);
+		processorElement->SetAttribute(PROCESSOR_ID_ATTR, s.processorId.c_str());
+		processorElement->SetAttribute(SENT_TRAFFIC_ATTR, s.numberOfSent);
+		processorElement->SetAttribute(RECEIVED_TRAFFIC_ATTR, s.numberOfReceived);
+		trafficElement->InsertEndChild(processorElement);
+	}
+	container->InsertEndChild(trafficElement);
 }
 
 std::string XmlNetworkConverter::convertVectorToString(const std::vector<Word>& words, const char* wordSeparator) {
@@ -505,8 +525,9 @@ int main(int argc, char** argv)
 		if (outputAll) {
 			LoggingSimulator* simulator = dynamic_cast<LoggingSimulator*>(result.simulator.get());
 			auto log = simulator->getLogs();
+			auto networkTraffic = simulator->getSummaries();
 			if (outputFilename) {
-				xnc.saveFullLog(log, outputFilename, wordSeparator);
+				xnc.saveFullLog(log, networkTraffic, outputFilename, wordSeparator);
 			}
 			else {
 				for (int i = 0; i < log.size(); ++i) {

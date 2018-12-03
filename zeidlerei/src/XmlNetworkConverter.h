@@ -4,6 +4,7 @@
 #include "Word.h"
 #include "Network.h"
 #include "Simulator.h"
+#include "LoggingSimulator.h"
 #include "tinyxml2.h"
 #include "ClusteredProcessor.h"
 #include "Visitor.h"
@@ -18,7 +19,7 @@ public:
 	};
 	Result loadSimulation(const char* fileName, const char* configurationFileName = 0, const bool& logRequired = false);
 	void saveConfiguration(const Simulator& simulator, const Network& network, const char* fileName, const char* wordSeparator);
-	void saveFullLog(std::vector<Simulator::Log> logs, const char* fileName, const char* wordSeparator);
+	void saveFullLog(std::vector<Simulator::Log> logs, std::vector<std::vector<LoggingSimulator::CommunicationSummary> > networkTraffic, const char* fileName, const char* wordSeparator);
 	const char* stepTypeToString(Simulator::StepType stepType);
 private:
 	class ProcessorConfigurationConverter : public ConfigurationVisitor
@@ -51,4 +52,5 @@ private:
 	static std::string convertVectorToString(const std::vector<Word>& words, const char* wordSeparator);
 	static std::string convertMultisetToString(const Multiset<Word>& multiset, const char* wordSeparator);
 	void insertNetworkConfigurationElement(tinyxml2::XMLDocument& doc, tinyxml2::XMLNode* container, const Simulator::StepType& lastStepType, const Network::Configuration& configuration, const char* wordSeparator);
+	void insertNetworkTrafficElement(tinyxml2::XMLDocument& doc, tinyxml2::XMLNode* container, const std::vector<LoggingSimulator::CommunicationSummary>& summary);
 };
