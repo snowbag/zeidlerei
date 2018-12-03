@@ -32,7 +32,12 @@ public:
 		}
 
 		bool operator==(const Configuration& other) const {
-			return nodes == other.nodes;
+			if (nodes.size() != other.nodes.size()) return false;
+			for (size_t i = 0; i < nodes.size(); ++i) {
+				if (*nodes[i] != *other.nodes[i])
+					return false;
+			}
+			return true;
 		}
 	};
 	Network(std::vector<std::shared_ptr<Processor>> processors, std::vector<Edge> edges);

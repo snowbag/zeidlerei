@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "FreeFilter.h"
+#include "NoneFilter.h"
 #include "LengthFilter.h"
 #include "RegexFilter.h"
 #include "PermitForbidFilter.h"
@@ -14,6 +15,14 @@ TEST(Filters, Free) {
 	FreeFilter f;
 	for (auto w : words) {
 		ASSERT_TRUE(f.apply(w));
+	}
+}
+
+TEST(Filters, None) {
+	std::vector<Word> words = { Word(""), Word("abcd"), Word("12345"), Word("(())()") };
+	NoneFilter f;
+	for (auto w : words) {
+		ASSERT_FALSE(f.apply(w));
 	}
 }
 

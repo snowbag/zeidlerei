@@ -31,6 +31,10 @@ public:
 			return wordSet == other.wordSet;
 		}
 
+		virtual bool operator!=(const Configuration& other) const {
+			return !(*this == other);
+		}
+
 		virtual void accept(ConfigurationVisitor* visitor);
 	};
 
@@ -41,6 +45,7 @@ public:
 	virtual void collectOutput();
 	virtual Multiset<Word> flushOutput();
 	virtual std::shared_ptr<Configuration> exportConfiguration();
+	std::string getId() { return id_; }
 protected:
 	Multiset<Word> wordSet_;
 	std::vector<std::shared_ptr<Rule> > ruleSet_;
