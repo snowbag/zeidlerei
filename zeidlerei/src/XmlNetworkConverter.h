@@ -12,11 +12,11 @@ class XmlNetworkConverter
 {
 public:
 	struct Result {
-		Simulator simulator;
+		std::unique_ptr<Simulator> simulator;
 		Network network;
 		std::vector<std::shared_ptr<HaltingCondition> > haltingConditions;
 	};
-	Result loadSimulation(const char* fileName, const char* configurationFileName = 0);
+	Result loadSimulation(const char* fileName, const char* configurationFileName = 0, const bool& logRequired = false);
 	void saveConfiguration(const Simulator& simulator, const Network& network, const char* fileName, const char* wordSeparator);
 	void saveFullLog(std::vector<Simulator::Log> logs, const char* fileName, const char* wordSeparator);
 	const char* stepTypeToString(Simulator::StepType stepType);
@@ -50,5 +50,5 @@ private:
 	std::shared_ptr<Processor> createProcessorInstance(tinyxml2::XMLElement* processorElement, const std::string& separator, const bool& hasConfiguration, const std::map<std::string, std::vector<Word> >& configurationWords);
 	static std::string convertVectorToString(const std::vector<Word>& words, const char* wordSeparator);
 	static std::string convertMultisetToString(const Multiset<Word>& multiset, const char* wordSeparator);
-	void insertNetworkConfigurationElement(tinyxml2::XMLDocument& doc, const Simulator::StepType& lastStepType, const Network::Configuration& configuration, const char* wordSeparator);
+	void insertNetworkConfigurationElement(tinyxml2::XMLDocument& doc, tinyxml2::XMLNode* container, const Simulator::StepType& lastStepType, const Network::Configuration& configuration, const char* wordSeparator);
 };

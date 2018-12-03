@@ -16,6 +16,7 @@
 #include "LengthFilter.h"
 #include "RegexFilter.h"
 #include "FreeFilter.h"
+#include "NoneFilter.h"
 #include "PermitForbidFilter.h"
 #include "LeftDeletionRule.h"
 #include "LeftInsertionRule.h"
@@ -28,6 +29,7 @@
 #include "AnySubstitutionRule.h"
 #include "Network.h"
 #include "Simulator.h"
+#include "LoggingSimulator.h"
 #include "ClusteringProcess.h"
 #include "Kmeans.h"
 #include "BottomUpClustering.h"
@@ -60,6 +62,7 @@ const char* FILTER_DETAILS_ATTR = "rule";
 const char* REGEX_FILTER_TYPE = "regex";
 const char* LENGTH_FILTER_TYPE = "length";
 const char* FREE_FILTER_TYPE = "free";
+const char* NONE_FILTER_TYPE = "none";
 const char* PERMIT_FORBID_FILTER_TYPE = "permit-forbid";
 
 const char* EDGE_GROUP_TAG = "graph";
@@ -75,6 +78,7 @@ const char* MAXIMUM_STEPS_HALTING_CONDITION_TYPE = "MaximumNumberOfSteps";
 const char* NONEMPTY_NODE_HALTING_CONDITION_TYPE = "NonEmptyNode";
 const char* SAME_CONFIGURATION_HALTING_CONDITION_TYPE = "ConsecutiveConfigurations";
 
+const char* CONFIGURATION_GROUP_TAG = "configurations";
 const char* CONFIGURATION_TAG = "configuration";
 const char* CONFIGURATION_TYPE_ATTR = "type";
 const char* INITIAL_CONFIGURATION_TYPE = "initial";
@@ -183,6 +187,9 @@ std::shared_ptr<Filter> XmlNetworkConverter::createFilterInstance(XMLElement* fi
 		else if (filterType == FREE_FILTER_TYPE) {
 			filter = std::make_shared<FreeFilter>(FreeFilter());
 		}
+		else if (filterType == NONE_FILTER_TYPE) {
+			filter = std::make_shared<NoneFilter>(NoneFilter());
+		}
 		else if (filterType == PERMIT_FORBID_FILTER_TYPE) {
 			std::string rule = filterElement->Attribute(FILTER_DETAILS_ATTR);
 			filter = std::make_shared<PermitForbidFilter>(PermitForbidFilter(rule));
@@ -251,7 +258,7 @@ std::shared_ptr<Processor> XmlNetworkConverter::createProcessorInstance(tinyxml2
 }
 
 
-XmlNetworkConverter::Result XmlNetworkConverter::loadSimulation(const char* fileName, const char* configurationFileName)
+XmlNetworkConverter::Result XmlNetworkConverter::loadSimulation(const char* fileName, const char* configurationFileName, const bool& logRequired)
 {
 	XMLDocument doc;
 	XMLDocument confDoc;
@@ -354,15 +361,22 @@ XmlNetworkConverter::Result XmlNetworkConverter::loadSimulation(const char* file
 		haltingCondition = haltingCondition->NextSiblingElement(HALTING_CONDITION_TAG);
 	}
 
-	return Result{ Simulator(network, lastStepType), network, conditions };
+	if (logRequired) {
+		return Result{ std::unique_ptr<Simulator>(new LoggingSimulator(network, lastStepType)), network, conditions };
+	}
+	else {
+		return Result{ std::unique_ptr<Simulator>(new Simulator(network, lastStepType)), network, conditions };
+	}
 }
 
 void XmlNetworkConverter::saveFullLog(std::vector<Simulator::Log> logs, const char* fileName, const char* wordSeparator)
 {
 	XMLDocument doc;
+	XMLElement* configurationGroup = doc.NewElement(CONFIGURATION_GROUP_TAG);
 	for (auto&& l : logs) {
-		insertNetworkConfigurationElement(doc, l.lastStepType, l.configuration, wordSeparator);
+		insertNetworkConfigurationElement(doc, configurationGroup, l.lastStepType, l.configuration, wordSeparator);
 	}
+	doc.InsertEndChild(configurationGroup);
 	doc.SaveFile(fileName);
 }
 
@@ -371,7 +385,7 @@ void XmlNetworkConverter::saveConfiguration(const Simulator& simulator, const Ne
 	XMLDocument doc;
 	Simulator::StepType lastStepType = simulator.getLastStepType();
 	Network::Configuration configuration = network.exportConfiguration();
-	insertNetworkConfigurationElement(doc, lastStepType, configuration, wordSeparator);
+	insertNetworkConfigurationElement(doc, &doc, lastStepType, configuration, wordSeparator);
 	doc.SaveFile(fileName);
 }
 
@@ -402,13 +416,13 @@ void XmlNetworkConverter::ProcessorConfigurationConverter::insertElement(XMLDocu
 	parentNode->InsertEndChild(nodeElement);
 }
 
-void XmlNetworkConverter::insertNetworkConfigurationElement(XMLDocument& doc, const Simulator::StepType& lastStepType, const Network::Configuration& configuration, const char* wordSeparator)
+void XmlNetworkConverter::insertNetworkConfigurationElement(XMLDocument& doc, XMLNode* container, const Simulator::StepType& lastStepType, const Network::Configuration& configuration, const char* wordSeparator)
 {
 	XMLElement* configurationElement = doc.NewElement(CONFIGURATION_TAG);
 	const char* stepTypeAttr = stepTypeToString(lastStepType);
 	configurationElement->SetAttribute(CONFIGURATION_TYPE_ATTR, stepTypeAttr);
 	configurationElement->SetAttribute(WORD_SEPARATOR_ATTR, wordSeparator);
-	doc.InsertEndChild(configurationElement);
+	container->InsertEndChild(configurationElement);
 	XMLElement* processorsElement = doc.NewElement(PROCESSOR_GROUP_TAG);
 	configurationElement->InsertEndChild(processorsElement);
 	ProcessorConfigurationConverter converter { doc, processorsElement, wordSeparator };
@@ -485,9 +499,12 @@ int main(int argc, char** argv)
 	try
 	{
 		XmlNetworkConverter xnc;
-		auto result = xnc.loadSimulation(nepFilename, configFilename);
+		auto&& result = xnc.loadSimulation(nepFilename, configFilename, outputAll);
+		result.simulator->executeSimulation(result.haltingConditions);
+
 		if (outputAll) {
-			auto log = result.simulator.executeSimulationWithLog(result.haltingConditions);
+			LoggingSimulator* simulator = dynamic_cast<LoggingSimulator*>(result.simulator.get());
+			auto log = simulator->getLogs();
 			if (outputFilename) {
 				xnc.saveFullLog(log, outputFilename, wordSeparator);
 			}
@@ -499,12 +516,11 @@ int main(int argc, char** argv)
 			}
 		}
 		else {
-			result.simulator.executeSimulation(result.haltingConditions);
 			if (outputFilename) {
-				xnc.saveConfiguration(result.simulator, result.network, outputFilename, wordSeparator);
+				xnc.saveConfiguration(*result.simulator, result.network, outputFilename, wordSeparator);
 			}
 			else {
-				std::cout << "Last step: " << xnc.stepTypeToString(result.simulator.getLastStepType()) << std::endl;
+				std::cout << "Last step: " << xnc.stepTypeToString(result.simulator->getLastStepType()) << std::endl;
 				std::cout << result.network.exportConfiguration() << std::endl;
 			}
 		}
